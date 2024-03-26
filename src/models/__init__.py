@@ -22,7 +22,7 @@ __model_factory = {
     "mobilenet_v3_small": mobilenet_v3_small,
     "vgg16": vgg16,
     "vit_b_16": vit_b_16,
-    "maxvit_t": maxvit,
+    "maxvit_t": maxvit_t,
 }
 
 
