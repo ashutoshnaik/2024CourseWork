@@ -4,7 +4,7 @@ import torch.nn as nn
 import torchvision.models as tvmodels
 
 
-__all__ = ["mobilenet_v3_small", "vgg16", "vit_b_16"]
+__all__ = ["mobilenet_v3_small", "vgg16", "vit_b_16", "maxvit_t"]
 
 
 class TorchVisionModel(nn.Module):
@@ -65,6 +65,16 @@ def mobilenet_v3_small(num_classes, loss={"xent"}, pretrained=True, **kwargs):
 def vit_b_16(num_classes, loss={"xent"}, pretrained=True, **kwargs):
     model = TorchVisionModel(
         "vit_b_16",
+        num_classes=num_classes,
+        loss=loss,
+        pretrained=pretrained,
+        **kwargs,
+    )
+    return model
+
+def maxvit_t(num_classes, loss={"xent"}, pretrained=True, **kwargs):
+    model = TorchVisionModel(
+        "maxvit_t",
         num_classes=num_classes,
         loss=loss,
         pretrained=pretrained,
