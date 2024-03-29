@@ -2,7 +2,7 @@
 
 import torch.nn as nn
 import torchvision.models as tvmodels
-from torchvision.models.vit import ViT_B_16_Weights
+from torchvision.models import ViT_B_16_Weights
 
 __all__ = ["mobilenet_v3_small", "vgg16", "vit_b_16", "maxvit_t"]
 
