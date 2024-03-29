@@ -2,7 +2,7 @@
 
 import torch.nn as nn
 import torchvision.models as tvmodels
-
+from torchvision.models.vit import ViT_B_16_Weights
 
 __all__ = ["mobilenet_v3_small", "vgg16", "vit_b_16", "maxvit_t"]
 
@@ -13,17 +13,20 @@ class TorchVisionModel(nn.Module):
 
         if name == "vit_b_16":
             print("vit_b_16")
+            self.backbone = tvmodels.vit_b_16(weights=ViT_B_16_Weights.IMAGENET1K_V1)
+            self.feature_dim = self.backbone.head.in_features
+            # Overwrite the head for custom num_classes
+            self.backbone.head = nn.Linear(self.feature_dim, num_classes)
         else:
             print("Some other CNN")
-    
-        self.loss = loss
-        self.backbone = tvmodels.__dict__[name](pretrained=pretrained)
-        self.feature_dim = self.backbone.classifier[0].in_features
+            self.backbone = tvmodels.__dict__[name](pretrained=pretrained)
+            self.feature_dim = self.backbone.classifier[0].in_features
+            # overwrite the classifier used for ImageNet pretrianing
+            # nn.Identity() will do nothing, it's just a place-holder
+            self.backbone.classifier = nn.Identity()
+            self.classifier = nn.Linear(self.feature_dim, num_classes)
 
-        # overwrite the classifier used for ImageNet pretrianing
-        # nn.Identity() will do nothing, it's just a place-holder
-        self.backbone.classifier = nn.Identity()
-        self.classifier = nn.Linear(self.feature_dim, num_classes)
+        self.loss = loss
 
     def forward(self, x):
         v = self.backbone(x)
