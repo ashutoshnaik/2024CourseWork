@@ -11,10 +11,10 @@ class TorchVisionModel(nn.Module):
     def __init__(self, name, num_classes, loss, pretrained, **kwargs):
         super().__init__()
 
-	if name == "vit_b_16":
-    		print_hi("vit_b_16")
-	else:
-    		print_hi("Some other CNN")
+        if name == "vit_b_16":
+            print("vit_b_16")
+        else:
+            print("Some other CNN")
     
         self.loss = loss
         self.backbone = tvmodels.__dict__[name](pretrained=pretrained)
