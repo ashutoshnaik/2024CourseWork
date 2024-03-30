@@ -14,10 +14,17 @@ class TorchVisionModel(nn.Module):
 
         if name == "vit_b_16":
             print("vit_b_16")
+            '''
             self.backbone = tvmodels.vit_b_16(weights=ViT_B_16_Weights.IMAGENET1K_V1)
             self.feature_dim = self.backbone.heads.head.in_features
             # Overwrite the head for custom num_classes
             self.backbone.heads.head = nn.Linear(self.feature_dim, num_classes)
+            '''
+            self.backbone = tvmodels.__dict__[vit_b_16](pretrained=pretrained)
+            self.feature_dim = self.backbone.head.in_features
+            self.backbone.head = nn.Identity()
+            self.classifier = nn.Linear(self.feature_dim, num_classes)
+
         else:
             print("Some other CNN")
             self.backbone = tvmodels.__dict__[name](pretrained=pretrained)
