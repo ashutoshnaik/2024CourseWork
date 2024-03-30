@@ -3,8 +3,9 @@
 import torch.nn as nn
 import torchvision.models as tvmodels
 from torchvision.models import ViT_B_16_Weights
+from transformers import ViTForImageClassification
 
-__all__ = ["mobilenet_v3_small", "vgg16", "vit_b_16", "maxvit_t"]
+__all__ = ["mobilenet_v3_small", "vgg16", "vit_b_16", "maxvit_t", "ViT"]
 
 
 class TorchVisionModel(nn.Module):
@@ -90,3 +91,8 @@ def maxvit_t(num_classes, loss={"xent"}, pretrained=True, **kwargs):
     )
     return model
 
+
+def ViT(num_classes, loss={"xent"}, pretrained=True, **kwargs):
+    model = ViTForImageClassification.from_pretrained('google/vit-base-patch16-224')
+    model.classifier = nn.Linear(model.classifier.in_features, num_classes)
+    return model
