@@ -11,6 +11,7 @@ __all__ = ["mobilenet_v3_small", "vgg16", "vit_b_16", "maxvit_t", "ViT"]
 class TorchVisionModel(nn.Module):
     def __init__(self, name, num_classes, loss, pretrained, **kwargs):
         super().__init__()
+        self.backbone = tvmodels.__dict__[name](pretrained=pretrained)
 
         if name == "vit_b_16":
             print("vit_b_16")
@@ -20,14 +21,13 @@ class TorchVisionModel(nn.Module):
             # Overwrite the head for custom num_classes
             self.backbone.heads.head = nn.Linear(self.feature_dim, num_classes)
             '''
-            self.backbone = tvmodels.__dict__[vit_b_16](pretrained=pretrained)
             self.feature_dim = self.backbone.head.in_features
             self.backbone.head = nn.Identity()
             self.classifier = nn.Linear(self.feature_dim, num_classes)
 
         else:
             print("Some other CNN")
-            self.backbone = tvmodels.__dict__[name](pretrained=pretrained)
+
             self.feature_dim = self.backbone.classifier[0].in_features
             # overwrite the classifier used for ImageNet pretrianing
             # nn.Identity() will do nothing, it's just a place-holder
