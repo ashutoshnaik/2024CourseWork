@@ -21,8 +21,8 @@ class TorchVisionModel(nn.Module):
             # Overwrite the head for custom num_classes
             self.backbone.heads.head = nn.Linear(self.feature_dim, num_classes)
             '''
-            self.feature_dim = self.backbone.head.in_features
-            self.backbone.head = nn.Identity()
+            self.feature_dim = self.backbone.heads.in_features
+            self.backbone.heads = nn.Identity()
             self.classifier = nn.Linear(self.feature_dim, num_classes)
 
         else:
